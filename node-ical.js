@@ -1,6 +1,7 @@
 var ical = require('./ical')
   , request = require('request')
   , fs = require('fs')
+  , RRule = require('rrule').RRule
 
 exports.fromURL = function(url, opts, cb){
   if (!cb)
@@ -22,9 +23,6 @@ exports.fromURL = function(url, opts, cb){
 exports.parseFile = function(filename){
   return ical.parseICS(fs.readFileSync(filename, 'utf8'))
 }
-
-
-var rrule = require('rrule').RRule
 
 ical.objectHandlers['RRULE'] = function(val, params, curr, stack, line){
   curr.rrule = line;
@@ -59,7 +57,7 @@ ical.objectHandlers['END'] = function (val, params, curr, stack) {
                     console.error("No toISOString function in curr.start", curr.start);
 				}
 			}
-			curr.rrule = rrule.fromString(rule);
+			curr.rrule = RRule.fromString(rule);
 		}
 	}
   return originalEnd.call(this, val, params, curr, stack);
