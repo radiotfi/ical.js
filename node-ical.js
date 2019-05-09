@@ -37,14 +37,12 @@ ical.objectHandlers['END'] = function (val, params, curr, stack) {
 		if (curr.rrule) {
 			var rule = curr.rrule.replace('RRULE:', '');
 			if (rule.indexOf('DTSTART') === -1) {
-
 				if (curr.start.length === 8) {
 					var comps = /^(\d{4})(\d{2})(\d{2})$/.exec(curr.start);
 					if (comps) {
 						curr.start = new Date(comps[1], comps[2] - 1, comps[3]);
 					}
 				}
-
 
 				if (typeof curr.start.toISOString === 'function') {
 					try {
@@ -53,8 +51,8 @@ ical.objectHandlers['END'] = function (val, params, curr, stack) {
 					} catch (error) {
 						console.error("ERROR when trying to convert to ISOString", error);
 					}
-                } else {
-                    console.error("No toISOString function in curr.start", curr.start);
+        } else {
+          console.error("No toISOString function in curr.start", curr.start);
 				}
 			}
 			curr.rrule = RRule.fromString(rule);
